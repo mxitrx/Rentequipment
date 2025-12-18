@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตะกร้าสินค้า - Pixelmotion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #111;
+            padding: 5px 10px;
+            border-radius: 6px;
+            border: 1px solid #333;
+            margin-top: 10px;
+        }
+        .qty-btn {
+            background: #333;
+            color: #fff;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        .qty-btn:hover { background: #555; }
+        .qty-value { font-weight: 600; min-width: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">PIXELMOTION</a>
+            <div class="nav-links">
+                <a href="index.html">หน้าแรก</a>
+                <a href="inventory.html">รายการอุปกรณ์</a>
+                <a href="terms.html">เงื่อนไขการเช่า</a>
+                <a href="contact.html">ติดต่อเรา</a>
+            </div>
+            <div class="nav-actions">
+                <a href="cart.html" class="icon-btn active">
+                    <i class="fas fa-shopping-bag"></i> 
+                    <span id="nav-cart-count" class="badge" style="display:none;">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Shopping Cart</h1>
+            <p>ตรวจสอบรายการและกำหนดวันเช่า</p>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="cart-layout">
+            
+            <div class="cart-items-container">
+                <div class="cart-header-row">
+                    <span>รายการอุปกรณ์</span>
+                    <span class="text-right">จัดการ</span>
+                </div>
+
+                <div id="cart-list-wrapper">
+                    </div>
+
+                <a href="inventory.html" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> เลือกอุปกรณ์เพิ่มเติม
+                </a>
+            </div>
+
+            <div class="cart-summary-wrapper">
+                <div class="summary-card">
+                    <h3>สรุปรายการเช่า</h3>
+                    
+                    <div class="summary-row">
+                        <span>วันที่รับของ</span>
+                        <input type="text" class="date-input" id="pickup-date" placeholder="DD/MM/YY">
+                    </div>
+                    <div class="summary-row">
+                        <span>วันที่คืนของ</span>
+                        <input type="text" class="date-input" id="return-date" placeholder="DD/MM/YY">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="summary-row">
+                        <span>จำนวนวันเช่า</span>
+                        <span id="rental-days" style="color: #4ade80; font-weight: bold;">1 วัน</span>
+                    </div>
+                    
+                    <div class="summary-row" style="align-items: flex-start; margin-top:15px;">
+                        <span>รายการ:</span>
+                        <div id="summary-items-list" style="text-align: right; color:#aaa; font-size:13px;"></div>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>ยอดรวมทั้งสิ้น</span>
+                        <span class="total-price" id="final-total">฿0</span>
+                    </div>
+
+                    <button onclick="goToPayment()" class="btn-primary full-width">ดำเนินการชำระเงิน</button>
+                    
+                    <p class="terms-note">
+                        <i class="fas fa-info-circle"></i> รับของวันนี้ คืนพรุ่งนี้ = 1 วัน (24 ชม.)
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Pixelmotion. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        // โหลดข้อมูลจาก LocalStorage
+        let cartData = JSON.parse(localStorage.getItem('pixelmotion_cart')) || [];
+        
+        // ตัวแปรเก็บ Object ของ Flatpickr และจำนวนวัน
+        let fpPickup, fpReturn;
+        let diffDays = 1;
+
+        function renderCart() {
+            const listWrapper = document.getElementById('cart-list-wrapper');
+            const summaryList = document.getElementById('summary-items-list');
+            
+            listWrapper.innerHTML = ''; 
+            summaryList.innerHTML = '';
+            
+            let itemsTotal = 0; // ราคารวมต่อวัน
+            let totalItemsQty = 0;
+
+            if (cartData.length === 0) {
+                listWrapper.innerHTML = `
+                    <div style="text-align:center; padding:50px; color:#666; border: 2px dashed #333; border-radius:12px;">
+                        <i class="fas fa-shopping-basket" style="font-size:40px; margin-bottom:15px;"></i>
+                        <p>ไม่มีสินค้าในตะกร้า</p>
+                    </div>`;
+                document.getElementById('final-total').textContent = '฿0';
+                return;
+            }
+
+            cartData.forEach((item, index) => {
+                const itemSubtotal = item.price * item.qty;
+                itemsTotal += itemSubtotal;
+                totalItemsQty += item.qty;
+
+                // สร้าง HTML การ์ดสินค้า
+                listWrapper.innerHTML += `
+                <div class="cart-item">
+                    <div class="item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-info">
+                            <span class="item-code">${item.code}</span>
+                            <h3>${item.name}</h3>
+                            <div class="price" style="font-size:16px; margin:5px 0;">฿${item.price.toLocaleString()} /วัน</div>
+                            
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                                <span class="qty-value">${item.qty}</span>
+                                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                        
+                        <div class="item-price-action">
+                            <div style="font-size:14px; color:#aaa; margin-bottom:5px;">
+                                รวม: ฿${itemSubtotal.toLocaleString()} <small>(ต่อวัน)</small>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem(${index})">
+                                <i class="fas fa-trash-alt"></i> ลบรายการ
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+                summaryList.innerHTML += `<div>${item.name} x${item.qty}</div>`;
+            });
+
+            // คำนวณราคาสุทธิ = ราคารวมต่อวัน x จำนวนวัน
+            const grandTotal = itemsTotal * diffDays;
+            
+            document.getElementById('final-total').textContent = '฿' + grandTotal.toLocaleString();
+            
+            // เรียกอัปเดตไอคอนรถเข็น (ถ้ามี function นี้ใน script.js หลัก)
+            if(window.updateCartBadge) window.updateCartBadge();
+        }
+
+        function updateQty(index, change) {
+            if (cartData[index].qty + change > 0) {
+                cartData[index].qty += change;
+                saveAndRender();
+            }
+        }
+
+        function removeItem(index) {
+            if(confirm('ต้องการลบรายการนี้ใช่หรือไม่?')) {
+                cartData.splice(index, 1);
+                saveAndRender();
+            }
+        }
+
+        function saveAndRender() {
+            localStorage.setItem('pixelmotion_cart', JSON.stringify(cartData));
+            renderCart();
+        }
+
+        // --- แก้ไขสูตรคำนวณวัน ---
+        function calculate() {
+            const start = fpPickup.selectedDates[0];
+            const end = fpReturn.selectedDates[0];
+
+            if (start && end) {
+                // ล้างค่าเวลาออก ให้เหลือแค่เที่ยงคืน เพื่อเทียบแค่วันที่
+                start.setHours(0,0,0,0);
+                end.setHours(0,0,0,0);
+
+                const diffTime = end - start;
+                const days = diffTime / (1000 * 60 * 60 * 24); // คำนวณผลต่างเป็นวัน
+                
+                // สูตร: วันคืน - วันรับ (ขั้นต่ำ 1 วัน)
+                // รับ 25 คืน 26 = 1 วัน
+                // รับ 25 คืน 25 = 1 วัน
+                diffDays = Math.max(1, days);
+                
+                document.getElementById('rental-days').textContent = diffDays + " วัน";
+            } else {
+                diffDays = 1;
+                document.getElementById('rental-days').textContent = "1 วัน";
+            }
+            
+            // เรนเดอร์ใหม่เพื่ออัปเดตราคา
+            renderCart();
+        }
+
+        function goToPayment() {
+            if (cartData.length === 0) {
+                alert('กรุณาเลือกอุปกรณ์ก่อนชำระเงิน');
+                return;
+            }
+            if (!fpPickup.selectedDates[0] || !fpReturn.selectedDates[0]) {
+                alert('กรุณาระบุวันที่รับและคืนของ');
+                return;
+            }
+            
+            const totalText = document.getElementById('final-total').textContent;
+            const cleanTotal = totalText.replace(/[^0-9]/g, '');
+            
+            window.location.href = `payment.html?total=${cleanTotal}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ตั้งค่า Flatpickr
+            const commonConfig = {
+                dateFormat: "d/m/y", // Format: 25/12/25
+                disableMobile: "true",
+                onChange: calculate
+            };
+
+            fpPickup = flatpickr("#pickup-date", {
+                ...commonConfig,
+                minDate: "today",
+                defaultDate: new Date()
+            });
+
+            // วันคืนของ default เป็นวันพรุ่งนี้
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            fpReturn = flatpickr("#return-date", {
+                ...commonConfig,
+                minDate: "today",
+                defaultDate: tomorrow
+            });
+
+            calculate();
+            renderCart();
+        });
+    </script>
+</body>
+</html>

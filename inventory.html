@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายการอุปกรณ์ทั้งหมด - Pixelmotion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">PIXELMOTION</a>
+            <div class="nav-links">
+                <a href="index.html">หน้าแรก</a>
+                <a href="inventory.html" class="active">รายการอุปกรณ์</a>
+                <a href="terms.html">เงื่อนไขการเช่า</a>
+                <a href="contact.html">ติดต่อเรา</a>
+            </div>
+            <div class="nav-actions">
+                <a href="cart.html" class="icon-btn"><i class="fas fa-shopping-bag"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Equipment Inventory</h1>
+            <p>เลือกเช่าอุปกรณ์ถ่ายทำคุณภาพสูง ครบครันทุกการใช้งาน</p>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        
+        <div class="inventory-layout">
+            
+            <aside class="sidebar-filters">
+                <div class="filter-group">
+                    <h3><i class="fas fa-filter"></i> หมวดหมู่สินค้า</h3>
+                    <ul class="category-list">
+                        <li class="active" data-category="all">ทั้งหมด (All)</li>
+                        <li data-category="camera">กล้อง (Cameras)</li>
+                        <li data-category="lens">เลนส์ (Lenses)</li>
+                        <li data-category="lighting">ไฟ (Lighting)</li>
+                        <li data-category="audio">เสียง (Audio)</li>
+                        <li data-category="monitor">มอนิเตอร์ & อุปกรณ์เสริม</li>
+                    </ul>
+                </div>
+
+                <div class="filter-group">
+                    <h3><i class="fas fa-tag"></i> สถานะของ</h3>
+                    <div class="checkbox-wrapper">
+                        <label><input type="checkbox" checked> พร้อมเช่า (Available)</label>
+                        <label><input type="checkbox" checked> ของเหลือน้อย (Low Stock)</label>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="product-area">
+                
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="ค้นหาชื่ออุปกรณ์, รุ่น...">
+                    </div>
+                    <div class="sort-box">
+                        <select>
+                            <option value="newest">มาใหม่ล่าสุด</option>
+                            <option value="price-asc">ราคา: ต่ำ -> สูง</option>
+                            <option value="price-desc">ราคา: สูง -> ต่ำ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="inventory-grid" id="inventory-grid">
+                    
+                    <article class="item-card category-camera" 
+                        data-code="CAM-SNY-A7M4" data-title="Sony Alpha a7 IV Set" data-stock="5" data-status="available"
+                        data-items="Body Sony A7 IV, แบตเตอรี่ x2, แท่นชาร์จ, Cage, Soft Case">
+                        <div class="card-image-container">
+                            <img src="https://www.provideocoalition.com/wp-content/uploads/4-Panasonic-Cameras.jpg" alt="Camera">
+                            <div class="card-overlay"><span class="view-btn">ดูรายละเอียด</span></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">CAM-PSN-AGUX180</span><span class="status-dot status-available"></span></div>
+                            <h3 class="item-name">Panasonic AG-UX180</h3>
+                            <div class="item-footer">
+                                <span class="price-tag">฿1,500 <small>/วัน</small></span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="item-card category-lens" 
+                        data-code="LENS-SNY-GM2470" data-title="FE 24-70mm F2.8 GM II" data-stock="2" data-status="available"
+                        data-items="เลนส์ FE 24-70mm GM II, Hood, ฝาปิดหน้า-ท้าย">
+                        <div class="card-image-container">
+                            <img src="https://images.unsplash.com/photo-1617005082133-548c4dd27f35?auto=format&fit=crop&w=800&q=80" alt="Lens">
+                            <div class="card-overlay"><span class="view-btn">ดูรายละเอียด</span></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">LENS-SNY-GM2470</span><span class="status-dot status-available"></span></div>
+                            <h3 class="item-name">FE 24-70mm F2.8 GM II</h3>
+                            <div class="item-footer">
+                                <span class="price-tag">฿1,800 <small>/วัน</small></span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="item-card category-lighting" 
+                        data-code="LGT-APU-300D" data-title="Aputure 300d II Set" data-stock="0" data-status="out"
+                        data-items="หัวไฟ 300d II, Control Box, ขาไฟ, Softbox">
+                        <div class="card-image-container">
+                            <img src="https://images.unsplash.com/photo-1555434990-e0386d26461e?auto=format&fit=crop&w=800&q=80" alt="Light">
+                            <div class="out-of-stock-overlay">OUT OF STOCK</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">LGT-APU-300D</span><span class="status-dot status-out"></span></div>
+                            <h3 class="item-name">Aputure 300d II Set</h3>
+                            <div class="item-footer">
+                                <span class="price-tag">฿1,200 <small>/วัน</small></span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="item-card category-audio" 
+                        data-code="AUD-RODE-WGO2" data-title="Rode Wireless GO II" data-stock="1" data-status="low"
+                        data-items="TX x2, RX x1, สาย SC5, ขนกันลม">
+                        <div class="card-image-container">
+                            <img src="https://images.unsplash.com/photo-1590963073688-769371fa3907?auto=format&fit=crop&w=800&q=80" alt="Mic">
+                            <div class="card-overlay"><span class="view-btn">ดูรายละเอียด</span></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">AUD-RODE-WGO2</span><span class="status-dot status-low"></span></div>
+                            <h3 class="item-name">Rode Wireless GO II</h3>
+                            <div class="item-footer">
+                                <span class="price-tag">฿800 <small>/วัน</small></span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="item-card category-camera" data-code="CAM-FX3" data-title="Sony FX3 Cinema Line" data-stock="1" data-status="available" data-items="Body FX3, XLR Handle, Battery">
+                        <div class="card-image-container">
+                            <img src="https://images.unsplash.com/photo-1624823183483-690204752b0c?auto=format&fit=crop&w=800&q=80" alt="FX3">
+                            <div class="card-overlay"><span class="view-btn">ดูรายละเอียด</span></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">CAM-FX3</span><span class="status-dot status-available"></span></div>
+                            <h3 class="item-name">Sony FX3 Cinema Line</h3>
+                            <div class="item-footer"><span class="price-tag">฿3,500 <small>/วัน</small></span></div>
+                        </div>
+                    </article>
+
+                    <article class="item-card category-lens" data-code="LENS-70200GM2" data-title="FE 70-200mm F2.8 GM II" data-stock="2" data-status="available" data-items="Lens 70-200 GM2, Tripod Collar">
+                        <div class="card-image-container">
+                            <img src="https://images.unsplash.com/photo-1616423664045-680fa2f44703?auto=format&fit=crop&w=800&q=80" alt="Lens">
+                            <div class="card-overlay"><span class="view-btn">ดูรายละเอียด</span></div>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top"><span class="item-code">LENS-70200GM2</span><span class="status-dot status-available"></span></div>
+                            <h3 class="item-name">FE 70-200mm F2.8 GM II</h3>
+                            <div class="item-footer"><span class="price-tag">฿2,000 <small>/วัน</small></span></div>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="inventoryModal">
+        <div class="modal-container">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-grid">
+                <div class="modal-image-col"><img id="modal-img" src="" alt=""></div>
+                <div class="modal-content-col">
+                    <div class="modal-header">
+                        <span id="modal-code">CODE</span>
+                        <div class="modal-status-wrapper"><span class="status-pill" id="modal-status-pill">Available</span></div>
+                    </div>
+                    <h2 id="modal-title">Title</h2>
+                    <p class="modal-price">ราคาเช่า: <span>ติดต่อสอบถาม</span></p>
+                    <div class="divider"></div>
+                    <div class="items-box">
+                        <h4><i class="fas fa-box-open"></i> อุปกรณ์ภายในชุด:</h4>
+                        <ul id="modal-items-list" class="styled-list"></ul>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-primary full-width">จองอุปกรณ์นี้</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Pixelmotion. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterItems = document.querySelectorAll('.category-list li');
+            const productCards = document.querySelectorAll('.item-card');
+
+            filterItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all
+                    filterItems.forEach(li => li.classList.remove('active'));
+                    // Add active to clicked
+                    item.classList.add('active');
+
+                    const category = item.dataset.category;
+
+                    productCards.forEach(card => {
+                        // ถ้าเลือก 'all' หรือ card มี class ตรงกับหมวดหมู่
+                        if (category === 'all' || card.classList.contains('category-' + category)) {
+                            card.style.display = 'block';
+                            // เพิ่ม animation เล็กน้อยตอนโผล่มา
+                            card.style.animation = 'fadeIn 0.5s ease';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search Function
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keyup', (e) => {
+                const term = e.target.value.toLowerCase();
+                productCards.forEach(card => {
+                    const title = card.dataset.title.toLowerCase();
+                    const code = card.dataset.code.toLowerCase();
+                    if(title.includes(term) || code.includes(term)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

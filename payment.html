@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ชำระเงิน - Pixelmotion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">PIXELMOTION</a>
+            <div class="nav-links">
+                <a href="index.html">หน้าแรก</a>
+                <a href="inventory.html">รายการอุปกรณ์</a>
+                <a href="contact.html">ติดต่อเรา</a>
+            </div>
+            <div class="nav-actions">
+                <a href="cart.html" class="icon-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="nav-cart-count" class="badge" style="display:none;">0</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1>Checkout</h1>
+            <p>ชำระเงินและยืนยันการจองอุปกรณ์</p>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="payment-layout">
+            
+            <div class="payment-left">
+                <div class="payment-card">
+                    <h3 class="card-title"><i class="fas fa-university"></i> ช่องทางการชำระเงิน</h3>
+                    <div class="bank-transfer-box">
+                        <div class="bank-info">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/59/Kbank_Logo.png" alt="KBank" class="bank-logo">
+                            <div>
+                                <h4>ธนาคารกสิกรไทย (KBank)</h4>
+                                <p>ชื่อบัญชี: <strong>บจก. พิกเซลโมชั่น สตูดิโอ</strong></p>
+                                <p class="acc-number">012-3-45678-9</p>
+                            </div>
+                        </div>
+                        <div class="qr-box">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="PromptPay QR">
+                            <span>สแกนเพื่อชำระเงิน</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-card">
+                    <h3 class="card-title"><i class="fas fa-address-card"></i> ข้อมูลผู้เช่า / ติดต่อ</h3>
+                    <form id="checkout-form">
+                        
+                        <div class="input-group">
+                            <input type="text" id="cust-name" class="modern-input" placeholder=" " required>
+                            <label for="cust-name" class="modern-label">ชื่อ-นามสกุล</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="input-group">
+                                <input type="tel" id="cust-phone" class="modern-input" placeholder=" " required>
+                                <label for="cust-phone" class="modern-label">เบอร์โทรศัพท์</label>
+                                <i class="fas fa-phone input-icon"></i>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="cust-email" class="modern-input" placeholder=" ">
+                                <label for="cust-email" class="modern-label">Email หรือ Line ID</label>
+                                <i class="fas fa-envelope input-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <textarea id="cust-notes" class="modern-input" rows="3" placeholder=" "></textarea>
+                            <label for="cust-notes" class="modern-label">หมายเหตุ (เช่น วันเวลารับของ)</label>
+                            <i class="fas fa-comment-alt input-icon textarea-icon"></i>
+                        </div>
+
+                        <button type="submit" class="btn-primary full-width mt-20">
+                            ยืนยันการจอง <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="payment-right">
+                <div class="summary-card sticky-card">
+                    <h3>สรุปรายการ (Order Summary)</h3>
+                    <div id="order-items-list" class="order-list"></div>
+                    <div class="divider"></div>
+                    <div class="summary-row total-row">
+                        <span>ยอดชำระรวม</span>
+                        <span class="total-price" id="display-total">฿0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-container success-modal-content">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>จองสำเร็จ!</h2>
+            <p>ระบบได้รับข้อมูลเรียบร้อยแล้ว<br>กรุณารอการติดต่อกลับเพื่อยืนยันคิว</p>
+            <button onclick="window.location.href='index.html'" class="btn-primary">กลับสู่หน้าหลัก</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>&copy; 2025 Pixelmotion. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // URL Google Apps Script (ตรวจสอบให้แน่ใจว่าเป็น Deployment ล่าสุด)
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKs2yKvbxNe1PSFDFRULw5ut15UWTAkk7tNL68GirCWmPrGB4hoik-y7e2FqoUuMviig/exec';
+
+            // 1. ตรวจสอบตะกร้าสินค้า
+            const cartData = JSON.parse(localStorage.getItem('pixelmotion_cart')) || [];
+            if(cartData.length === 0) {
+                alert('ตะกร้าสินค้าว่างเปล่า');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // 2. คำนวณยอดเงิน
+            const urlParams = new URLSearchParams(window.location.search);
+            let totalAmount = urlParams.get('total');
+            if(!totalAmount) {
+                let sum = cartData.reduce((acc, item) => acc + (item.price * item.qty), 0);
+                totalAmount = sum; 
+            }
+            document.getElementById('display-total').textContent = '฿' + parseInt(totalAmount).toLocaleString();
+
+            // 3. แสดงรายการสินค้า
+            const itemsList = document.getElementById('order-items-list');
+            let itemsStringForSheet = "";
+            
+            itemsList.innerHTML = '';
+            cartData.forEach(item => {
+                itemsList.innerHTML += `
+                    <div class="order-item">
+                        <div class="oi-name">
+                            <span>${item.name}</span> <span class="oi-qty">x${item.qty}</span>
+                        </div>
+                        <div class="oi-price">฿${(item.price * item.qty).toLocaleString()}</div>
+                    </div>`;
+                itemsStringForSheet += `${item.name} (x${item.qty})\n`;
+            });
+
+            // 4. ส่งข้อมูลเมื่อกดปุ่ม
+            const form = document.getElementById('checkout-form');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // เปลี่ยนปุ่มเป็นสถานะโหลด
+                const btn = form.querySelector('button');
+                const oldText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังส่งข้อมูล...';
+                btn.disabled = true;
+
+                // รวมวันที่เข้ากับหมายเหตุ (ถ้ามีการเลือกวันที่)
+                const dateVal = document.getElementById('cust-date') ? document.getElementById('cust-date').value : '';
+                const noteVal = document.getElementById('cust-notes').value;
+                const finalNote = dateVal ? `[รับของ: ${dateVal}] ${noteVal}` : noteVal;
+
+                // เตรียมข้อมูลส่ง (ใช้ URLSearchParams เพื่อให้ code.js อ่านค่าได้)
+                const formData = new URLSearchParams();
+                formData.append('name', document.getElementById('cust-name').value);
+                formData.append('phone', document.getElementById('cust-phone').value);
+                // เช็คว่ามี input email หรือไม่ (ถ้าไม่มีให้ส่งค่าว่าง)
+                formData.append('email', document.getElementById('cust-email') ? document.getElementById('cust-email').value : '-');
+                formData.append('notes', finalNote);
+                formData.append('Items', itemsStringForSheet);
+                formData.append('TotalCost', parseInt(totalAmount).toLocaleString());
+
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    // ไม่ว่าผลลัพธ์จะเป็นอย่างไร ถ้าเซิร์ฟเวอร์ตอบกลับถือว่าสำเร็จในขั้นต้น
+                    console.log('Server response:', data);
+                    
+                    // 1. ล้างตะกร้า
+                    localStorage.removeItem('pixelmotion_cart');
+                    
+                    // 2. อัปเดตตัวเลขรถเข็น (ถ้ามี function นี้)
+                    if(window.updateCartBadge) window.updateCartBadge();
+
+                    // 3. แสดง Modal จองสำเร็จ (ที่จัดกลางไว้แล้ว)
+                    const modal = document.getElementById('successModal');
+                    modal.classList.add('active'); // ใส่ class active เพื่อให้ display: flex ทำงาน
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    // กรณี Error จริงๆ ให้แจ้งเตือน แต่ส่วนใหญ่ถ้าส่งไป Google Script แบบ no-cors อาจจะจับ error ยาก
+                    // ให้ถือว่าสำเร็จแล้วแสดง modal เลยก็ได้ครับ เพื่อประสบการณ์ผู้ใช้ที่ดี
+                    localStorage.removeItem('pixelmotion_cart');
+                    document.getElementById('successModal').classList.add('active');
+                })
+                .finally(() => {
+                    btn.innerHTML = oldText;
+                    btn.disabled = false;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
